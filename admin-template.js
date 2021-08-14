@@ -1,4 +1,9 @@
 const adminTemplate = `
+        <ul class="nav">
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="/view-all-coaches.html">Manage All Coaches</a>
+            </li>
+        </ul>
         <form>
             <!-- Full Name -->
             <div class="mb-3">
@@ -33,7 +38,7 @@ const adminTemplate = `
             <!-- HubSpot Calendar URL -->
             <div class="mb-3 hubspotCalendarUrl" id="hubspot-calendar-section">
                 <label for="hubspotCalendarUrl" class="form-label">HubSpot Calendar URL</label>
-                <input type="email" class="form-control" id="hubspotCalendarUrl"
+                <input type="text" class="form-control" id="hubspotCalendarUrl"
                     placeholder="https://meetings.hubspot.com/accime" aria-describedby="hubSpotCalendarUrlHelp">
                 <div id="hubSpotCalendarUrl" class="form-text">Please enter your hubspot calendar url.</div>
             </div>

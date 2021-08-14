@@ -18,11 +18,12 @@
 
 const { coaches } = loadPGecom();
 
-const listCoach = [...coaches];
+let listCoach = coaches || [];
 
 const addCoach = (coach) => {
     listCoach.push(coach);
     addCoachToStorage(coach);
+    alert('Coach added!');
     return listCoach;
 };
 
@@ -32,8 +33,10 @@ const deleteCoachById = (id) => {
     });
 
     listCoach = results;
+    log('New Coach: ', listCoach);
     deleteCoachFromStorageById(id);
 
+    renderCoachTable(listCoach);
     return listCoach;
 };
 
@@ -56,7 +59,8 @@ const deleteAllCoach = () => {
     const pgecom = loadPGecom();
 
     pgecom.coaches = [];
-    localStorage.setItem('pgecom');
+    localStorage.setItem('pgecom', JSON.stringify(pgecom));
+    renderCoachTable(listCoach);
 };
 
 // Handle Forms
@@ -93,7 +97,45 @@ $('form').on('submit', (event) => {
 
     log('Coach Data: ', coach);
 
-    // addCoach(coach);
+    addCoach(coach);
+});
 
-    log('Submit Event Fired');
+
+// Display Tables
+
+const renderCoachTable = (coaches) => {
+    log('Coaches: ', coaches);
+    $('tbody').empty();
+    const results = coaches.map(({ id, fullName, country, hubspotCalendarUrl, isPGecomStaff }, index) => {
+        const tr = `
+            <tr>
+                <td>
+                    <a href="${id}">${index + 1}</a>
+                </td>
+                <td>${fullName}</td>
+                <td>${country}</td>
+                <td>
+                    <a href="${hubspotCalendarUrl}">Coach Calendar</a>
+                </td>
+                <td>${isPGecomStaff}</td>
+                <td>
+                    <button class="btn btn-danger delete-coach" data-id="${id}">Delete</button>
+                </td>
+            </tr>
+        `;
+
+        return tr;
+    });
+
+    $('tbody').append(results);
+    return results;
+};
+
+renderCoachTable(coaches);
+
+
+$('#delete-all-coaches').on('click', deleteAllCoach);;
+$(document).on('click', '.delete-coach', function() {
+    const coachId = $(this).attr('data-id');
+    deleteCoachById(coachId);
 });

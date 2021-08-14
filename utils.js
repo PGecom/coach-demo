@@ -48,9 +48,9 @@ const getListCountry = () => {
 
 const renderAdminTemplate = () => {
     log('Admin Template');
-    $('.container').empty();
+    $('.admin').empty();
 
-    $('.container').append(adminTemplate);
+    $('.admin').append(adminTemplate);
     getListCountry();
 };
 
@@ -58,9 +58,9 @@ renderAdminTemplate();
 
 const renderNoAccessTemplate = () => {
     log('No Access Template');
-    $('.container').empty();
+    $('.admin').empty();
 
-    $('.container').append(noAccessTemplate);
+    $('.admin').append(noAccessTemplate);
 };
 
 loginToAdminButton.on('click', () => {
