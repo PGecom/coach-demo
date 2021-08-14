@@ -76,9 +76,6 @@ $(document).on("click", ".profile-card", function () {
   const coach = getCoachById(coachId);
 
   const { modalContent, modalFooter } = modalTemplate(coach);
-  log("Modal Content: ", modalContent);
-  log("Modal Footer: ", modalFooter);
-
   $(".modal-content").html(modalContent);
   $(".modal-footer").html(modalFooter);
 });

@@ -15,7 +15,6 @@ const deleteCoachById = (id) => {
     });
 
     listCoach = results;
-    log('New Coach: ', listCoach);
     deleteCoachFromStorageById(id);
 
     renderCoachTable(listCoach);
@@ -75,8 +74,6 @@ $('form').on('submit', (event) => {
         hubspotCalendarUrl
     };
 
-    log('Coach Data: ', coach);
-
     addCoach(coach);
 });
 
@@ -84,7 +81,6 @@ $('form').on('submit', (event) => {
 // Display Tables
 
 const renderCoachTable = (coaches) => {
-    log('Coaches: ', coaches);
     $('tbody').empty();
     const results = coaches.map(({ id, fullName, country, hubspotCalendarUrl, isPGecomStaff }, index) => {
         const tr = `

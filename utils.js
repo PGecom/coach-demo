@@ -54,7 +54,6 @@ const renderAdminTemplate = () => {
 };
 
 const renderNoAccessTemplate = () => {
-    log('No Access Template');
     $('.admin').empty();
 
     $('.admin').append(noAccessTemplate);
