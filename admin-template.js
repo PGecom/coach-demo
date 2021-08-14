@@ -1,7 +1,7 @@
 const adminTemplate = `
         <ul class="nav">
             <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="/view-all-coaches.html">Manage All Coaches</a>
+                <a class="nav-link active" aria-current="page" href="view-all-coaches.html">Manage All Coaches</a>
             </li>
         </ul>
         <form>
