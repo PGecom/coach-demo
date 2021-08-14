@@ -47,14 +47,11 @@ const getListCountry = () => {
 
 
 const renderAdminTemplate = () => {
-    log('Admin Template');
     $('.admin').empty();
 
     $('.admin').append(adminTemplate);
     getListCountry();
 };
-
-renderAdminTemplate();
 
 const renderNoAccessTemplate = () => {
     log('No Access Template');
@@ -63,10 +60,15 @@ const renderNoAccessTemplate = () => {
     $('.admin').append(noAccessTemplate);
 };
 
+const accessCode = loadAccessCodeFromLocalStorage();
+if (accessCode) {
+    renderAdminTemplate();
+}
+
 loginToAdminButton.on('click', () => {
     const promptResponse = prompt("What is your access code?");
     if (websiteAccessCodes.includes(promptResponse)) {
-        localStorage.setItem('accessCode', promptResponse);
+        addAccessCodeToLocalStorage(promptResponse);
         return renderAdminTemplate();
     }
     

@@ -1,21 +1,3 @@
-/*
-
-{
-        id: '',    
-        fullName: 'Fedy Jean',
-        profilePictureUrl: '',
-        country: '',
-        experiences: [],
-        isPGecomStaff: true,
-        contactOnSlack: '',
-        createdWith: '',
-        hubSpotCalendarUrl: ''
-    }
-*/
-// Elements
-
-// Features
-
 const { coaches } = loadPGecom();
 
 let listCoach = coaches || [];
@@ -77,8 +59,6 @@ $('form').on('submit', (event) => {
 
     // Select all the checkboxes
     $('input[type=checkbox]:checked').each(function(i){
-        log('Item: ', i);
-        log('Val: ', $(this));
         experiences[i] = $(this).val();
     });
 

@@ -68,3 +68,13 @@ const updateCoachFromStorageById = (id, obj) => {
 
     return pgecom;
 };
+
+
+const addAccessCodeToLocalStorage = (code) => {
+    localStorage.setItem('accessCode', code);
+}
+
+const loadAccessCodeFromLocalStorage = () => {
+    const accessCode = localStorage.getItem('accessCode');
+    return accessCode;
+}
