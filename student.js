@@ -90,8 +90,8 @@ const modalTemplate = (coach) => {
         modalContent.append(fullNameEl);
         modalContent.append(profileImgEl);
         modalContent.append(countryEl);
-        modalContent.append(experienceTitle);
-        modalContent.append(experiencesList);
+        // modalContent.append(experienceTitle);
+        // modalContent.append(experiencesList);
   return {
     modalFooter,
     modalContent,
