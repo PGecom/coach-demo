@@ -103,8 +103,8 @@ const profileTemplate = (coach) => {
     coach;
   return `
         <li class="collection-item avatar">
-            <div data-target="coach-modal" class="profile-card modal-trigger" data-id="${_id}">
-                <img src="${profilePictureUrl}" alt="" class="circle">
+            <div class="profile-card" data-id="${_id}">
+                <img src="${profilePictureUrl}" data-target="coach-modal" alt="" class="circle modal-trigger">
                 <span class="title">${fullName}</span>
                 <p><b>Country: </b>${country}<br>
                 </p>
