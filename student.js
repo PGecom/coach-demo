@@ -90,8 +90,8 @@ const modalTemplate = (coach) => {
         modalContent.append(fullNameEl);
         modalContent.append(profileImgEl);
         modalContent.append(countryEl);
-        // modalContent.append(experienceTitle);
-        // modalContent.append(experiencesList);
+        modalContent.append(experienceTitle);
+        modalContent.append(experiencesList);
   return {
     modalFooter,
     modalContent,
@@ -106,8 +106,11 @@ const profileTemplate = (coach) => {
             <div data-target="coach-modal" class="profile-card modal-trigger" data-id="${_id}">
                 <img src="${profilePictureUrl}" alt="" class="circle">
                 <span class="title">${fullName}</span>
-                <p>${country}<br>
+                <p><b>Country: </b>${country}<br>
                 </p>
+                <a href="${hubspotCalendarUrl}" target="_blank" class="waves-effect waves-green btn">
+                  Schedule
+                </a>
             </div>
             <a href="${hubspotCalendarUrl}" target="_blank" class="secondary-content"><i class="material-icons">schedule</i></a>
         </li>
