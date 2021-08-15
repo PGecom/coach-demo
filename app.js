@@ -1,47 +1,119 @@
-const { coaches } = loadPGecom();
+const origin = window.location.origin;
+let listCoach = [];
 
-let listCoach = coaches || [];
-
-const addCoach = (coach) => {
-    listCoach.push(coach);
-    addCoachToStorage(coach);
-    alert('Coach added!');
-    return listCoach;
-};
-
-const deleteCoachById = (id) => {
-    const results = listCoach.filter((coach, index) => {
-        return coach.id !== id;
-    });
-
-    listCoach = results;
-    deleteCoachFromStorageById(id);
-
-    renderCoachTable(listCoach);
-    return listCoach;
-};
-
-const updateCoachById = (id, obj) => {
-    const results = listCoach.map((coach) => {
+const getCoach = async () => {
+    try {
+        const options = {
+            url
+        };
+        const coaches = await $.ajax(options);
+        listCoach = coaches;
         return {
-            ...coach,
-            ...obj
+            isError: false,
+            coaches
         }
-    });
-
-    listCoach = results;
-    updateCoachFromStorageById(id, obj);
-
-    return listCoach;
+    } catch (error) {
+        return {
+            isError: true,
+            coaches: []
+        }
+    }
 };
 
-const deleteAllCoach = () => {
-    listCoach = [];
-    const pgecom = loadPGecom();
+// Initialize Coach
+getCoach()
+    .then(({ coaches }) => {
+        renderCoachTable(coaches);
+        log('New coaches loaded!!');
+    })
 
-    pgecom.coaches = [];
-    localStorage.setItem('pgecom', JSON.stringify(pgecom));
-    renderCoachTable(listCoach);
+const addCoach = async (coach) => {
+    try {
+        const options = {
+            url,
+            method: 'POST',
+            contentType: "application/json",
+            data: JSON.stringify(coach)
+        };
+        log('Options: ', options);
+        await $.ajax(options);
+        alert('Coach added!');
+        return {
+            isError: false,
+            coaches: []
+        }
+    } catch (error) {
+        log('Error: ', error);
+        return {
+            isError: true,
+            coaches: []
+        }
+    }
+};
+
+const deleteCoachById = async (id) => {
+    try {
+        const options = {
+            url: `${url}?id=${id}`,
+            method: 'DELETE'
+        };
+        await $.ajax(options);
+        const { coaches } = await getCoach();
+        log('Coaches - Delete: ', coaches);
+        renderCoachTable(coaches);
+        return {
+            isError: false,
+            coaches
+        }
+    } catch (error) {
+        log('Error: ', error);
+        return {
+            isError: true,
+            coaches: []
+        }
+    }
+};
+
+const updateCoachById = async (id, payload) => {
+    try {
+        const options = {
+            url: `${url}?id=${id}`,
+            method: 'PUT',
+            data: payload
+        };
+        await $.ajax(options);
+        const { coaches } = await getCoach();
+        return {
+            isError: false,
+            coaches
+        }
+    } catch (error) {
+        return {
+            isError: true,
+            coaches: []
+        }
+    }
+};
+
+const deleteAllCoach = async () => {
+    try {
+        const options = {
+            url,
+            method: 'DELETE'
+        };
+        await $.ajax(options);
+        const { coaches } = await getCoach();
+        renderCoachTable(coaches);
+        return {
+            isError: false,
+            coaches
+        }
+    } catch (error) {
+        return {
+            isError: true,
+            coaches: []
+        }
+    }
 };
 
 // Handle Forms
@@ -60,9 +132,9 @@ $('form').on('submit', (event) => {
     $('input[type=checkbox]:checked').each(function(i){
         experiences[i] = $(this).val();
     });
+    log('Experiences: ', experiences);
 
     const coach = {
-        id: uuid.v4(),    
         fullName,
         email,
         profilePictureUrl,
@@ -79,39 +151,39 @@ $('form').on('submit', (event) => {
 
 
 // Display Tables
-
 const renderCoachTable = (coaches) => {
     $('tbody').empty();
-    const results = coaches.map(({ id, fullName, country, hubspotCalendarUrl, isPGecomStaff }, index) => {
-        const tr = `
-            <tr>
-                <td>
-                    <a href="${id}">${index + 1}</a>
-                </td>
-                <td>${fullName}</td>
-                <td>${country}</td>
-                <td>
-                    <a href="${hubspotCalendarUrl}">Coach Calendar</a>
-                </td>
-                <td>${isPGecomStaff}</td>
-                <td>
-                    <button class="btn btn-danger delete-coach" data-id="${id}">Delete</button>
-                </td>
-            </tr>
-        `;
-
-        return tr;
-    });
+    const results = coaches.map((coach, index) => generateTablTr(coach, index));
 
     $('tbody').append(results);
     return results;
 };
 
-renderCoachTable(coaches);
-
+const generateTablTr = (coach, index) => {
+    const { _id, fullName, country, hubspotCalendarUrl, isPGecomStaff } = coach;
+    const tr = `
+        <tr>
+            <td>
+                <a href="${_id}">${index + 1}</a>
+            </td>
+            <td>${fullName}</td>
+            <td>${country}</td>
+            <td>
+                <a href="${hubspotCalendarUrl}">Coach Calendar</a>
+            </td>
+            <td>${isPGecomStaff}</td>
+            <td>
+                <button class="btn btn-danger delete-coach" data-id="${_id}">Delete</button>
+            </td>
+        </tr>
+    `;
+    return tr;
+}
 
 $('#delete-all-coaches').on('click', deleteAllCoach);;
 $(document).on('click', '.delete-coach', function() {
+    log('Deleting...');
     const coachId = $(this).attr('data-id');
+    log('Coach ID: ', coachId);
     deleteCoachById(coachId);
 });

@@ -1,14 +1,57 @@
-const { coaches } = loadPGecom();
 const { log } = console;
 
+const getCoach = async () => {
+  try {
+    const options = {
+      url,
+    };
+    const coaches = await $.ajax(options);
+    listCoach = coaches;
+    addCoachesToLocalStorage(coaches);
+    return {
+      isError: false,
+      coaches,
+    };
+  } catch (error) {
+    return {
+      isError: true,
+      coaches: [],
+    };
+  }
+};
+
+// Initialize Coach
+getCoach().then(({ coaches }) => {
+  log("New coaches loaded!!: ", coaches);
+  renderCoachProfiles(coaches);
+});
+
+const getCoachById = async (id) => {
+  try {
+    const options = {
+      url: `${url}?id=${id}`
+    };
+    const coach = await $.ajax(options);
+    return {
+      isError: false,
+      coach,
+    };
+  } catch (error) {
+    return {
+      isError: true,
+      coach: [],
+    };
+  }
+};
+
 const displayCoachExperience = (experiences) => {
-    const result = experiences.map((experience) => {
-        return `
+  const result = experiences.map((experience) => {
+    return `
             <li>${experience}</li>
         `;
-    });
+  });
 
-    return result;
+  return result;
 };
 
 const modalTemplate = (coach) => {
@@ -21,19 +64,34 @@ const modalTemplate = (coach) => {
   } = coach;
 
   const modalFooter = `
-        <a href="${hubspotCalendarUrl}" target="_blank" class="modal-close waves-effect waves-green btn-flat">Pran yon lè avèk coach lan</a>
+        <a href="${hubspotCalendarUrl}" target="_blank" class="modal-close waves-effect waves-green btn">
+          Schedule
+        </a>
     `;
 
-  const modalContent = `
-        <h4>${fullName}</h4>
-        <img src="${profilePictureUrl}" alt="" />
-        <p><b>Country: </b>${country}</p>
+  const fullNameEl = $('<h4>').text(fullName);
+  const profileImgEl = $('<img>').attr('src', profilePictureUrl);
+  const countryEl = $(`<p><b>Country: </b> ${country}</p>`);
+  const experiencesList = $('<ul></ul>');
 
-        <p><b>Experiences</b>: </p>
-        <ul>
-            ${displayCoachExperience(experiences)}
-        </ul>
-    `;
+  experiences.map((experience) => {
+    const currentList = $('<li>').text(experience);
+    currentList.css({
+      'list-style-type': 'initial',
+      'margin-left': '25px'
+    })
+    experiencesList.append(currentList);
+  });
+
+  const experienceTitle = $('<b>Experiences: </b>');
+
+
+  const modalContent = $('<div>');
+        modalContent.append(fullNameEl);
+        modalContent.append(profileImgEl);
+        modalContent.append(countryEl);
+        modalContent.append(experienceTitle);
+        modalContent.append(experiencesList);
   return {
     modalFooter,
     modalContent,
@@ -41,11 +99,11 @@ const modalTemplate = (coach) => {
 };
 
 const profileTemplate = (coach) => {
-  const { id, fullName, profilePictureUrl, country, hubspotCalendarUrl } =
+  const { _id, fullName, profilePictureUrl, country, hubspotCalendarUrl } =
     coach;
   return `
         <li class="collection-item avatar">
-            <div data-target="coach-modal" class="profile-card modal-trigger" data-id="${id}">
+            <div data-target="coach-modal" class="profile-card modal-trigger" data-id="${_id}">
                 <img src="${profilePictureUrl}" alt="" class="circle">
                 <span class="title">${fullName}</span>
                 <p>${country}<br>
@@ -69,11 +127,9 @@ const renderCoachProfiles = (coaches) => {
   return result;
 };
 
-renderCoachProfiles(coaches);
-
-$(document).on("click", ".profile-card", function () {
+$(document).on("click", ".profile-card", async function () {
   const coachId = $(this).attr("data-id");
-  const coach = getCoachById(coachId);
+  const { coach } = await getCoachById(coachId);
 
   const { modalContent, modalFooter } = modalTemplate(coach);
   $(".modal-content").html(modalContent);
@@ -83,11 +139,3 @@ $(document).on("click", ".profile-card", function () {
 $(document).ready(function () {
   $(".modal").modal();
 });
-
-const getCoachById = (id) => {
-  const currentCoach = coaches.find((coach) => {
-    return coach.id === id;
-  });
-
-  return currentCoach;
-};

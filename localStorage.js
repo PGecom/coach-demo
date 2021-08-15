@@ -23,52 +23,14 @@ const loadPGecom = () => {
     return obj || pgecom;
 };
 
-const addCoachToStorage = (coach) => {
+const addCoachesToLocalStorage = (coaches) => {
     const pgecom = loadPGecom(); 
 
-    pgecom.coaches.push(coach);
+    pgecom.coaches = coaches;
 
     addPGecomToLocalStorage(pgecom);
     return pgecom;
 };
-
-const listCoachFromStorage = () => {
-    const { coaches } = loadPGecom();
-    return coaches;
-};
-
-const deleteCoachFromStorageById = (id) => {
-    const pgecom = loadPGecom();
-    const { coaches } = pgecom;
-
-    const results = coaches.filter((coach, index) => {
-        return coach.id !== id;
-    });
-
-    pgecom.coaches = results;
-
-    addPGecomToLocalStorage(pgecom);
-
-    return pgecom;
-};
-
-const updateCoachFromStorageById = (id, obj) => {
-    const pgecom = loadPGecom();
-    const { coaches } = pgecom;
-
-    const results = coaches.map((coach) => {
-        return {
-            ...coach,
-            ...obj
-        }
-    });
-
-    pgecom.coaches = results;
-    addPGecomToLocalStorage(pgecom);
-
-    return pgecom;
-};
-
 
 const addAccessCodeToLocalStorage = (code) => {
     localStorage.setItem('accessCode', code);
