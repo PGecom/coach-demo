@@ -64,7 +64,7 @@ const modalTemplate = (coach) => {
   } = coach;
 
   const modalFooter = `
-        <a href="${hubspotCalendarUrl}" target="_blank" class="modal-close waves-effect waves-green btn">
+        <a href="${hubspotCalendarUrl}" class="modal-close waves-effect waves-green btn">
           Schedule
         </a>
     `;
@@ -108,11 +108,11 @@ const profileTemplate = (coach) => {
                 <span class="title">${fullName}</span>
                 <p><b>Country: </b>${country}<br>
                 </p>
-                <a href="${hubspotCalendarUrl}" target="_blank" class="waves-effect waves-green btn">
+                <a href="${hubspotCalendarUrl}" class="waves-effect waves-green btn">
                   Schedule
                 </a>
             </div>
-            <a href="${hubspotCalendarUrl}" target="_blank" class="secondary-content"><i class="material-icons">schedule</i></a>
+            <a href="${hubspotCalendarUrl}" class="secondary-content"><i class="material-icons">schedule</i></a>
         </li>
     `;
 };
