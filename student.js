@@ -1,4 +1,6 @@
 const { log } = console;
+const { coaches } = loadPGecom();
+const listCoach = coaches || [];
 
 const getCoach = async () => {
   try {
@@ -20,16 +22,10 @@ const getCoach = async () => {
   }
 };
 
-// Initialize Coach
-getCoach().then(({ coaches }) => {
-  log("New coaches loaded!!: ", coaches);
-  renderCoachProfiles(coaches);
-});
-
 const getCoachById = async (id) => {
   try {
     const options = {
-      url: `${url}?id=${id}`
+      url: `${url}?id=${id}`,
     };
     const coach = await $.ajax(options);
     return {
@@ -69,29 +65,28 @@ const modalTemplate = (coach) => {
         </a>
     `;
 
-  const fullNameEl = $('<h4>').text(fullName);
-  const profileImgEl = $('<img>').attr('src', profilePictureUrl);
+  const fullNameEl = $("<h4>").text(fullName);
+  const profileImgEl = $("<img>").attr("src", profilePictureUrl);
   const countryEl = $(`<p><b>Country: </b> ${country}</p>`);
-  const experiencesList = $('<ul></ul>');
+  const experiencesList = $("<ul></ul>");
 
   experiences.map((experience) => {
-    const currentList = $('<li>').text(experience);
+    const currentList = $("<li>").text(experience);
     currentList.css({
-      'list-style-type': 'initial',
-      'margin-left': '25px'
-    })
+      "list-style-type": "initial",
+      "margin-left": "25px",
+    });
     experiencesList.append(currentList);
   });
 
-  const experienceTitle = $('<b>Experiences: </b>');
+  const experienceTitle = $("<b>Experiences: </b>");
 
-
-  const modalContent = $('<div>');
-        modalContent.append(fullNameEl);
-        modalContent.append(profileImgEl);
-        modalContent.append(countryEl);
-        modalContent.append(experienceTitle);
-        modalContent.append(experiencesList);
+  const modalContent = $("<div>");
+  modalContent.append(fullNameEl);
+  modalContent.append(profileImgEl);
+  modalContent.append(countryEl);
+  modalContent.append(experienceTitle);
+  modalContent.append(experiencesList);
   return {
     modalFooter,
     modalContent,
@@ -129,6 +124,16 @@ const renderCoachProfiles = (coaches) => {
   $(".home").append(result);
   return result;
 };
+
+// Initialize Coach
+getCoach().then(({ coaches }) => {
+  log("New coaches loaded!!: ", coaches);
+  renderCoachProfiles(coaches);
+});
+
+if (coaches.length) {
+  renderCoachProfiles(listCoach);
+}
 
 $(document).on("click", ".profile-card", async function () {
   const coachId = $(this).attr("data-id");

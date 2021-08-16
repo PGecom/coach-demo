@@ -1,5 +1,6 @@
 const origin = window.location.origin;
-let listCoach = [];
+const { coaches } = loadPGecom();
+let listCoach = coaches || [];
 
 const getCoach = async () => {
     try {
@@ -7,6 +8,7 @@ const getCoach = async () => {
             url
         };
         const coaches = await $.ajax(options);
+        addCoachesToLocalStorage(coaches);
         listCoach = coaches;
         return {
             isError: false,
@@ -27,6 +29,10 @@ getCoach()
         log('New coaches loaded!!');
     })
 
+if (listCoach.length) {
+    return renderCoachTable(listCoach);
+}
+
 const addCoach = async (coach) => {
     try {
         const options = {
@@ -35,9 +41,7 @@ const addCoach = async (coach) => {
             contentType: "application/json",
             data: JSON.stringify(coach)
         };
-        log('Options: ', options);
         await $.ajax(options);
-        alert('Coach added!');
         return {
             isError: false,
             coaches: []
@@ -132,8 +136,6 @@ $('form').on('submit', (event) => {
     $('input[type=checkbox]:checked').each(function(i){
         experiences[i] = $(this).val();
     });
-    log('Experiences: ', experiences);
-
     const coach = {
         fullName,
         email,
