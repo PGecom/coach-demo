@@ -113,6 +113,7 @@ const profileTemplate = (coach) => {
 };
 
 const renderCoachProfiles = (coaches) => {
+  $('.profile-view').empty();
   const result = coaches.map((coach) => {
     return `
             <ul class="collection">
@@ -121,7 +122,7 @@ const renderCoachProfiles = (coaches) => {
         `;
   });
 
-  $(".home").append(result);
+  $(".profile-view").append(result);
   return result;
 };
 
