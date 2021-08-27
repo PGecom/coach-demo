@@ -101,7 +101,6 @@ const profileTemplate = (coach) => {
             <div class="profile-card" data-id="${_id}">
                 <img src="${profilePictureUrl}" data-target="coach-modal" alt="" class="circle modal-trigger">
                 <span class="title">${fullName}</span>
-                <p><b>Country: </b>${country}<br>
                 </p>
                 <a href="${hubspotCalendarUrl}" class="waves-effect waves-green btn">
                   Schedule
